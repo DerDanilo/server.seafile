@@ -1,0 +1,12 @@
+--- check_init_admin.py-dist	2017-04-02 05:09:57.882685743 -0700
++++ check_init_admin.py	2017-04-02 05:10:22.270686706 -0700
+@@ -352,5 +352,9 @@
+ rpc = RPC()
+
+ def main():
++    if need_create_admin():
++        create_admin("admin@localhost","adminpass")
++    return
++
+     if not need_create_admin():
+         return

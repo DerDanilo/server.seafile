@@ -1,0 +1,14 @@
+---
+
+- name: restart seafile
+  service:
+    name: "{{item}}"
+    state: stopped
+  with_items:
+    - seafile
+    - seahub
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted

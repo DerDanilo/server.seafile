@@ -1,0 +1,11 @@
+--- ccnet.conf-dist	2017-04-02 19:44:49.871136256 +0200
++++ ccnet.conf	2017-04-02 19:44:55.787095231 +0200
+@@ -2,7 +2,7 @@
+ USER_NAME = seafile
+ ID = 1f552b39c0ed665536ca4608bbffd177972858b2
+ NAME = seafile
+-SERVICE_URL = http://10.77.0.3:8000
++SERVICE_URL = http://10.77.0.3
+
+ [Client]
+ PORT = 13419

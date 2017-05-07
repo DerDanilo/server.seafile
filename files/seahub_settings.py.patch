@@ -1,0 +1,8 @@
+--- seahub_settings.py-dist	2017-04-02 21:06:15.058426156 +0200
++++ seahub_settings.py	2017-04-02 21:06:34.226330003 +0200
+@@ -12,3 +12,5 @@
+     }
+ }
+
++FILE_SERVER_ROOT = 'http://10.77.0.3/seafhttp'
++

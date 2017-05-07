@@ -1,0 +1,12 @@
+---
+
+seafile_version: 6.0.9
+# must correspond to downloaded tar-file
+
+ip: "{{ansible_all_ipv4_addresses[0]}}"
+mysql_user: seafile
+mysql_passwd: 'SSMKfMv4tiyZ'
+server_name:
+  - seafile.example.com
+  - seafile.sha2017.org
+  - files.sha2017.org

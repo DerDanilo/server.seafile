@@ -1,0 +1,29 @@
+
+- name: copy seafile directory
+  synchronize:
+    src: seafile-server-{{seafile_version}}
+    dest: /opt/seafile
+
+# - name: stop seafile services
+#   service:
+#     name: "{{item}}"
+#     state: stopped
+#   with_items:
+#     - seafile
+#     - seahub
+
+- name: copy installation script
+  template:
+    src: templates/install-seafile.sh
+    dest: /opt/seafile
+    mode: ugo+x
+
+- name: install seafile
+  shell: "./install-seafile.sh > install-seafile.log 2>&1 || true"
+  args:
+    chdir: /opt/seafile
+
+- name: patch seafile admin user
+  patch:
+    basedir: "/opt/seafile/seafile-server-{{seafile_version}}"
+    src: check_init_admin.py.patch

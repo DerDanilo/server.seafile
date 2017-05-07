@@ -1,0 +1,100 @@
+---
+
+# if seafile is not installed, do the following tasks
+
+- name: test if seafile is alrealy installed
+  stat: path=/opt/seafile/data
+  register: seafile_installed
+
+- name: drop seafile databases
+  mysql_db:
+    name: "{{item}}"
+    state: absent
+  with_items:
+    - ccnet-db
+    - seafile-db
+    - seahub-db
+  when: seafile_installed.stat.exists == False
+
+- name: remove seafile data and config
+  file:
+    path: "/opt/seafile/{{item}}"
+    state: absent
+  with_items:
+    - data
+    - ccnet
+    - pids
+    - seafile-server-latest
+    - conf
+    - logs
+    - seahub-data
+  when: seafile_installed.stat.exists == False
+
+# ensure prerequisites are met
+
+- name: install required packages
+  apt: pkg="{{item}}"
+  with_items:
+    - python2.7
+    - libpython2.7
+    - python-setuptools
+    - python-imaging
+    - python-ldap
+    - python-mysqldb
+    - python-memcache
+    - python-urllib3
+
+# install
+
+- name: install seafile
+  include: install.yml
+  when: seafile_installed.stat.exists == False
+
+# configure
+
+- name: copy nginx.conf
+  template:
+   src: nginx.conf
+   dest: /etc/nginx/conf.d/seafile.conf
+  notify: restart nginx
+
+- name: patch ccnet.conf
+  lineinfile:
+    dest: /opt/seafile/conf/ccnet.conf
+    regexp: "^SERVICE_URL"
+    line: "SERVICE_URL = http://{{ip}}"
+  notify: restart seafile
+
+- name: patch seahub_settings.py
+  lineinfile:
+    dest: /opt/seafile/conf/seahub_settings.py
+    regexp: "^FILE_SERVER_ROOT"
+    line: "FILE_SERVER_ROOT = 'http://{{ip}}/seafhttp'"
+  notify: restart seafile
+
+# prepare and invoke startup files
+
+- name: create systemd unit files
+  copy:
+    src: "{{item}}.service"
+    dest: "/etc/systemd/system/{{item}}.service"
+    mode: 0664
+  with_items:
+    - seafile
+    - seahub
+
+- name: enable seafile services
+  service:
+    name: "{{item}}"
+    enabled: true
+  with_items:
+    - seafile
+    - seahub
+
+- name: start seafile services
+  service:
+    name: "{{item}}"
+    state: started
+  with_items:
+    - seafile
+    - seahub
