@@ -1,0 +1,7 @@
+---
+ - hosts: vagrant
+   become: yes
+   vars:
+   roles:
+    - server.seafile
+

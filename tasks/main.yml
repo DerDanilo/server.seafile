@@ -3,7 +3,7 @@
 # if seafile is not installed, do the following tasks
 
 - name: test if seafile is alrealy installed
-  stat: path=/opt/seafile/data
+  stat: path="{{seafile_install_dir}}/data"
   register: seafile_installed
 
 - name: drop seafile databases
@@ -14,7 +14,7 @@
     - ccnet-db
     - seafile-db
     - seahub-db
-  when: seafile_installed.stat.exists == False
+  when: database_remove is defined and database_remove
 
 - name: remove seafile data and config
   file:
@@ -75,26 +75,20 @@
 # prepare and invoke startup files
 
 - name: create systemd unit files
-  copy:
-    src: "{{item}}.service"
+  template:
+    src: "{{item}}.service.j2"
     dest: "/etc/systemd/system/{{item}}.service"
     mode: 0664
   with_items:
     - seafile
     - seahub
 
-- name: enable seafile services
+- name: enable and starting seafile services
   service:
     name: "{{item}}"
     enabled: true
+    state: started 
   with_items:
     - seafile
     - seahub
 
-- name: start seafile services
-  service:
-    name: "{{item}}"
-    state: started
-  with_items:
-    - seafile
-    - seahub

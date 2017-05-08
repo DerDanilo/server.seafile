@@ -1,0 +1,6 @@
+---
+# Seafile is depended on the following roles. These also should be installed before installing the Seafile software.
+dependencies:
+ - { role: server.baseline }
+ - { role: server.nginx.php7 }
+ - { role: server.mariadb }

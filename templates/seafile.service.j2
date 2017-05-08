@@ -1,0 +1,13 @@
+[Unit]
+Description=Seafile
+Requires=network.target
+After=syslog.target network.target
+[Service]
+Type=forking
+ExecStart={{seafile_install_dir}}/seafile-server-latest/seafile.sh start
+ExecStop={{seafile_install_dir}}/seafile-server-latest/seafile.sh stop
+ExecReload={{seafile_install_dir}}/seafile-server-latest/seafile.sh restart
+Wants=nginx.service mysql.service
+
+[Install]
+WantedBy=multi-user.target

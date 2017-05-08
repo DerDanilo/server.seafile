@@ -13,6 +13,8 @@ Needed roles: (from <https://github.com/sha2017>)
 - server.nginx-php7
 - server.mariadb
 
+
+
 Documentation
 -------------
 
@@ -21,6 +23,7 @@ Documentation
 - fetch the "Server for generic Linux" from <https://www.seafile.com/en/download/>
 - that's as of 2017-04: <https://bintray.com/artifact/download/seafile-org/seafile/seafile-server_6.0.9_x86-64.tar.gz>
 - edit the 'seafile_version' in vars/main.yml
+- To drop all databases of seafile (handy for reinstalling), use --extra-vars "database_remove=true"
 
 ### Do the installation
 
@@ -56,14 +59,16 @@ Example Playbook
     - server.seafile
 </pre>
 
+Changelog
+---------
+ - Peer reviewed
+ - Added testing playbook + makefile to create an easy testing enviroment with Vagrant (see testing/Makefile | testing/vagrant.yml)
+
+
 TODO
 ----
 
-- test it
 - in vars: only first IPv4 address is used, needs improvement to include other IPv4 and IPv6 addresses
-- remove preset passwords from
-  - vars/main.yml
-  - files/check_init_admin.py
 - test handler
 
 License
@@ -71,6 +76,7 @@ License
 
 WTFPL
 
-Author
+Author(s)
 ------
 Derik van Zuetphen, derik@sha2017.org
+Maikel van Leeuwen, maikel@sha2017.org

@@ -1,0 +1,14 @@
+[Unit]
+Description=Seafile
+Requires=network.target
+After=syslog.target network.target
+[Service]
+Type=forking
+ExecStart={{seafile_install_dir}}/seafile-server-latest/seahub.sh start-fastcgi
+ExecStop={{seafile_install_dir}}/seafile-server-latest/seahub.sh stop
+ExecReload={{seafile_install_dir}}/seafile-server-latest/seahub.sh restart-fastcgi
+PIDFile={{seafile_install_dir}}/seafile-server-latest/runtime/seahub.pid
+Wants=nginx.service mysql.service
+
+[Install]
+WantedBy=multi-user.target
